@@ -9,6 +9,9 @@ mat_data = loadmat('eeg_data.mat')
 # note: the file contains
 # data -> EEG segments (each segment is 4096 samples)
 # labels -> class of each segment (0, 1, or 2)
+    # 0 = Rest State
+    # 1 = Active State
+    # 2 = Seizure 
 # fs -> sampling frequency (173.61 Hz)
 
 # extract the variables
