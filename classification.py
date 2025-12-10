@@ -15,16 +15,17 @@ print("="*80)
 
 # Load the feature data
 print("\nLoading feature data...")
-mat_data = loadmat('features_eeg_data.mat')
+mat= loadmat('features_20sec.mat')
 
-# Extract all components
-data_filtered = mat_data['data_filtered']       # Time-domain signal (500, 4096)
-stats_features = mat_data['stats_features']      # Statistical features (500, 4)
-diff_signal = mat_data['diff_signal']            # Differentiated signal (500, 4095)
-diff_stats_features = mat_data['diff_stats_features']  # Diff stats (500, 4)
-freq_features = mat_data['freq_features']        # Frequency bands (500, 5)
-labels = mat_data['labels'].flatten()
-fs = float(mat_data['fs'][0, 0])
+# Extract all componentsdata_filtered
+
+data_windowed       = mat["data_windowed"]
+stats_features      = mat["stats_features"]
+diff_signal         = mat["diff_signal"]
+diff_stats_features = mat["diff_stats_features"]
+freq_features       = mat["freq_features"]
+labels              = mat["labels"].flatten()
+fs                  = float(mat["fs"][0][0])
 
 print(f"\nDataset Information:")
 print(f"Total segments: {len(labels)}")
@@ -32,7 +33,7 @@ print(f"  Class 0 (Rest): {np.sum(labels == 0)} segments")
 print(f"  Class 1 (Active): {np.sum(labels == 1)} segments")
 print(f"  Class 2 (Seizure): {np.sum(labels == 2)} segments")
 print(f"\nSignal representations:")
-print(f"  Time-domain signal: {data_filtered.shape}")
+print(f"  Time-domain signal: {data_windowed.shape}")
 print(f"  Differentiated signal: {diff_signal.shape}")
 print(f"  Frequency-band features: {freq_features.shape}")
 
@@ -47,7 +48,7 @@ print("REPRESENTATION 1: TIME-DOMAIN EEG SIGNAL")
 print("="*80)
 print("Using raw EEG signal (4096 samples per segment)")
 
-X_time = data_filtered  # Shape: (500, 4096)
+X_time = data_windowed # Shape: (500, 4096)
 print(f"Feature vector shape: {X_time.shape}")
 
 # Split and scale
@@ -438,11 +439,11 @@ plt.text(0.05, 0.5, summary_text, fontsize=10, family='monospace',
          bbox=dict(boxstyle='round', facecolor='lightyellow', alpha=0.8, pad=1))
 
 plt.tight_layout()
-plt.savefig('signal_representation_comparison.png', dpi=300, bbox_inches='tight')
+plt.savefig('signal_representation_comparison_20.png', dpi=300, bbox_inches='tight')
 plt.show()
 
 print("\n" + "="*80)
-print("Visualization saved as 'signal_representation_comparison.png'")
+print("Visualization saved as 'signal_representation_comparison_20sec.png'")
 print("="*80)
 
 # ============================================================================
@@ -450,7 +451,7 @@ print("="*80)
 # ============================================================================
 print("\nSaving detailed report...")
 
-with open('signal_representation_report.txt', 'w') as f:
+with open('signal_representation_report_20sec.txt', 'w') as f:
     f.write("="*80 + "\n")
     f.write("SIGNAL REPRESENTATION COMPARISON FOR EEG CLASSIFICATION\n")
     f.write("="*80 + "\n\n")
@@ -551,7 +552,7 @@ with open('signal_representation_report.txt', 'w') as f:
     
     f.write("="*80 + "\n")
 
-print("Detailed report saved as 'signal_representation_report.txt'")
+print("Detailed report saved as 'signal_representation_report_20.txt'")
 print("\n" + "="*80)
 print("ANALYSIS COMPLETE!")
 print("="*80)

@@ -1,0 +1,183 @@
+================================================================================
+SIGNAL REPRESENTATION COMPARISON FOR EEG CLASSIFICATION
+================================================================================
+
+Dataset: 500 EEG segments
+Train/Test Split: 80/20 (400 / 100)
+Sampling Frequency: 173.61 Hz
+
+================================================================================
+REPRESENTATION: Time-Domain
+================================================================================
+Description: Raw EEG signal (4096 samples)
+Feature dimensions: (500, 1736)
+Number of features: 1736
+Optimal K: 1
+Best Test Accuracy: 0.5900 (59.00%)
+Average prediction time: 0.1132 seconds
+
+K-value Results:
+--------------------------------------------------------------------------------
+K= 1 | Train: 1.0000 | Test: 0.5900 | Error: 0.4100
+K= 2 | Train: 0.7650 | Test: 0.5100 | Error: 0.4900
+K= 3 | Train: 0.7500 | Test: 0.5100 | Error: 0.4900
+K= 4 | Train: 0.6850 | Test: 0.4900 | Error: 0.5100
+K= 5 | Train: 0.6525 | Test: 0.5000 | Error: 0.5000
+K= 6 | Train: 0.6125 | Test: 0.4400 | Error: 0.5600
+K= 7 | Train: 0.6150 | Test: 0.5100 | Error: 0.4900
+K= 8 | Train: 0.5675 | Test: 0.4300 | Error: 0.5700
+K= 9 | Train: 0.5625 | Test: 0.4700 | Error: 0.5300
+K=10 | Train: 0.5250 | Test: 0.4400 | Error: 0.5600
+
+--------------------------------------------------------------------------------
+Classification Report:
+--------------------------------------------------------------------------------
+              precision    recall  f1-score   support
+
+        Rest       0.53      0.78      0.63        40
+      Active       0.64      0.57      0.61        40
+     Seizure       1.00      0.25      0.40        20
+
+    accuracy                           0.59       100
+   macro avg       0.72      0.53      0.54       100
+weighted avg       0.67      0.59      0.57       100
+
+Confusion Matrix:
+              Predicted
+              Rest  Active  Seizure
+True  Rest      31     9     0
+      Active    17    23     0
+      Seizure   11     4     5
+
+Per-Class Recall:
+  Rest:    0.7750 (77.50%)
+  Active:  0.5750 (57.50%)
+  Seizure: 0.2500 (25.00%)
+
+================================================================================
+REPRESENTATION: Differentiated
+================================================================================
+Description: First derivative (4095 samples)
+Feature dimensions: (500, 1735)
+Number of features: 1735
+Optimal K: 1
+Best Test Accuracy: 0.5500 (55.00%)
+Average prediction time: 0.1136 seconds
+
+K-value Results:
+--------------------------------------------------------------------------------
+K= 1 | Train: 1.0000 | Test: 0.5500 | Error: 0.4500
+K= 2 | Train: 0.6875 | Test: 0.4800 | Error: 0.5200
+K= 3 | Train: 0.7175 | Test: 0.5300 | Error: 0.4700
+K= 4 | Train: 0.5850 | Test: 0.5100 | Error: 0.4900
+K= 5 | Train: 0.5825 | Test: 0.5400 | Error: 0.4600
+K= 6 | Train: 0.5325 | Test: 0.5100 | Error: 0.4900
+K= 7 | Train: 0.5500 | Test: 0.5200 | Error: 0.4800
+K= 8 | Train: 0.5000 | Test: 0.4400 | Error: 0.5600
+K= 9 | Train: 0.5150 | Test: 0.4700 | Error: 0.5300
+K=10 | Train: 0.4875 | Test: 0.4400 | Error: 0.5600
+
+--------------------------------------------------------------------------------
+Classification Report:
+--------------------------------------------------------------------------------
+              precision    recall  f1-score   support
+
+        Rest       0.51      0.90      0.65        40
+      Active       0.59      0.40      0.48        40
+     Seizure       1.00      0.15      0.26        20
+
+    accuracy                           0.55       100
+   macro avg       0.70      0.48      0.46       100
+weighted avg       0.64      0.55      0.51       100
+
+Confusion Matrix:
+              Predicted
+              Rest  Active  Seizure
+True  Rest      36     4     0
+      Active    24    16     0
+      Seizure   10     7     3
+
+Per-Class Recall:
+  Rest:    0.9000 (90.00%)
+  Active:  0.4000 (40.00%)
+  Seizure: 0.1500 (15.00%)
+
+================================================================================
+REPRESENTATION: Frequency-Band
+================================================================================
+Description: 5 frequency band powers
+Feature dimensions: (500, 5)
+Number of features: 5
+Optimal K: 4
+Best Test Accuracy: 0.8100 (81.00%)
+Average prediction time: 0.0161 seconds
+
+K-value Results:
+--------------------------------------------------------------------------------
+K= 1 | Train: 1.0000 | Test: 0.7700 | Error: 0.2300
+K= 2 | Train: 0.8900 | Test: 0.7600 | Error: 0.2400
+K= 3 | Train: 0.9000 | Test: 0.7900 | Error: 0.2100
+K= 4 | Train: 0.8675 | Test: 0.8100 | Error: 0.1900
+K= 5 | Train: 0.8675 | Test: 0.7900 | Error: 0.2100
+K= 6 | Train: 0.8425 | Test: 0.7800 | Error: 0.2200
+K= 7 | Train: 0.8575 | Test: 0.7900 | Error: 0.2100
+K= 8 | Train: 0.8275 | Test: 0.7900 | Error: 0.2100
+K= 9 | Train: 0.8250 | Test: 0.7700 | Error: 0.2300
+K=10 | Train: 0.8075 | Test: 0.7800 | Error: 0.2200
+
+--------------------------------------------------------------------------------
+Classification Report:
+--------------------------------------------------------------------------------
+              precision    recall  f1-score   support
+
+        Rest       0.71      0.97      0.82        40
+      Active       0.89      0.60      0.72        40
+     Seizure       1.00      0.90      0.95        20
+
+    accuracy                           0.81       100
+   macro avg       0.87      0.83      0.83       100
+weighted avg       0.84      0.81      0.80       100
+
+Confusion Matrix:
+              Predicted
+              Rest  Active  Seizure
+True  Rest      39     1     0
+      Active    16    24     0
+      Seizure    0     2    18
+
+Per-Class Recall:
+  Rest:    0.9750 (97.50%)
+  Active:  0.6000 (60.00%)
+  Seizure: 0.9000 (90.00%)
+
+================================================================================
+COMPARATIVE SUMMARY
+================================================================================
+
+Representation            Features     Optimal K    Accuracy       
+--------------------------------------------------------------------------------
+Time-Domain               1736         1            0.5900         
+Differentiated            1735         1            0.5500         
+Frequency-Band            5            4            0.8100         
+
+================================================================================
+BEST REPRESENTATION: Frequency-Band
+Accuracy: 0.8100 (81.00%)
+Optimal K: 4
+================================================================================
+
+KEY FINDINGS:
+--------------------------------------------------------------------------------
+1. DIMENSIONALITY: Lower-dimensional frequency-band features are more efficient
+   (5 features vs 1736 in time-domain)
+
+2. SEIZURE DETECTION: Frequency-Band achieved best seizure recall
+   (90.00% of seizures detected)
+
+3. FREQUENCY REPRESENTATION: Frequency-band features provide best overall accuracy
+   Confirms importance of spectral analysis for EEG classification
+
+4. CURSE OF DIMENSIONALITY: High-dimensional representations (time-domain,
+   differentiated) suffer from overfitting despite containing more information
+
+================================================================================
