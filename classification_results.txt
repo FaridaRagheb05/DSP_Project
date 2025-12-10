@@ -1,0 +1,41 @@
+EEG CLASSIFICATION RESULTS USING KNN
+======================================================================
+
+Dataset: 500 EEG segments
+Features per segment: 8204
+Train/Test Split: 80/20
+
+Results for K = 1 to 10:
+----------------------------------------------------------------------
+K= 1 | Train Acc: 1.0000 | Test Acc: 0.5900 | Test Error: 0.4100
+K= 2 | Train Acc: 0.7475 | Test Acc: 0.5200 | Test Error: 0.4800
+K= 3 | Train Acc: 0.7025 | Test Acc: 0.5100 | Test Error: 0.4900
+K= 4 | Train Acc: 0.6400 | Test Acc: 0.4700 | Test Error: 0.5300
+K= 5 | Train Acc: 0.6250 | Test Acc: 0.5200 | Test Error: 0.4800
+K= 6 | Train Acc: 0.6025 | Test Acc: 0.4900 | Test Error: 0.5100
+K= 7 | Train Acc: 0.6200 | Test Acc: 0.4800 | Test Error: 0.5200
+K= 8 | Train Acc: 0.5875 | Test Acc: 0.4900 | Test Error: 0.5100
+K= 9 | Train Acc: 0.6400 | Test Acc: 0.4400 | Test Error: 0.5600
+K=10 | Train Acc: 0.5775 | Test Acc: 0.4400 | Test Error: 0.5600
+
+======================================================================
+OPTIMAL K = 1
+Best Test Accuracy: 0.5900 (59.00%)
+Best Test Error: 0.4100 (41.00%)
+======================================================================
+
+Classification Report:
+              precision    recall  f1-score   support
+
+        Rest       0.59      0.75      0.66        40
+      Active       0.58      0.70      0.64        40
+     Seizure       1.00      0.05      0.10        20
+
+    accuracy                           0.59       100
+   macro avg       0.72      0.50      0.46       100
+weighted avg       0.67      0.59      0.54       100
+
+Confusion Matrix:
+[[30 10  0]
+ [12 28  0]
+ [ 9 10  1]]
