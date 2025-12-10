@@ -9,9 +9,6 @@ mat_data = loadmat('eeg_data.mat')
 # note: the file contains
 # data -> EEG segments (each segment is 4096 samples)
 # labels -> class of each segment (0, 1, or 2)
-    # 0 = Rest State
-    # 1 = Active State
-    # 2 = Seizure 
 # fs -> sampling frequency (173.61 Hz)
 
 # extract the variables
@@ -164,3 +161,162 @@ print(f"Power at 50 Hz reduced by: {power_reduction:.2f}%") # if filtering worke
 print(f"Signal power (original): {np.var(first_segment_original):.2f}")
 print(f"Signal power (filtered): {np.var(first_segment_filtered):.2f}")
 print("Done")
+
+
+# AVERAGE SPECTRUM PLOTS FOR EACH CLASS
+
+print("Computing Average Spectra for Each Class")
+
+# class names for plotting
+class_names = ['Rest State', 'Active State', 'Seizure']
+class_colors = ['blue', 'green', 'red']
+
+# parameters for spectral analysis
+# using Welch's method for power spectral density estimation
+nperseg = 1024  # window length for FFT (1024 samples = around 5.9 seconds at 173.61 Hz)
+window_type = 'hann'  # Hann window -> reduces spectral leakage
+
+# store average spectra for each class
+avg_spectra = []
+frequencies = None
+
+# compute average spectrum for each class
+for class_idx in range(3):
+    print(f"\nProcessing Class {class_idx} ({class_names[class_idx]})")
+    
+    # get all segments belonging to this class
+    class_segments = data_filtered[labels == class_idx, :]
+    num_segments = class_segments.shape[0]
+    print(f"  Number of segments: {num_segments}")
+    
+    # compute PSD for each segment and average them
+    all_psd = []
+    for i in range(num_segments):
+        # compute power spectral density using Welch's method
+        freq, psd = signal.welch(class_segments[i, :], fs, 
+                                window=window_type, 
+                                nperseg=nperseg,
+                                noverlap=nperseg//2)  # 50% overlap
+        all_psd.append(psd)
+    
+    # average across all segments of this class
+    avg_psd = np.mean(all_psd, axis=0)
+    avg_spectra.append(avg_psd)
+    
+    # store frequency array (same for all classes)
+    if frequencies is None:
+        frequencies = freq
+    
+    print(f"  Average spectrum computed (frequency range: {freq[0]:.2f} - {freq[-1]:.2f} Hz)")
+
+# plot average spectra for all three classes
+plt.figure(figsize=(14, 10))
+
+# plot 1: all three classes on the same plot (log scale)
+plt.subplot(2, 2, 1)
+for class_idx in range(3):
+    plt.semilogy(frequencies, avg_spectra[class_idx], 
+                color=class_colors[class_idx], 
+                linewidth=2, 
+                label=class_names[class_idx],
+                alpha=0.8)
+plt.xlabel('Frequency (Hz)', fontsize=11)
+plt.ylabel('Power Spectral Density (log scale)', fontsize=11)
+plt.title('Average Power Spectra - All Classes (Log Scale)', fontsize=12, fontweight='bold')
+plt.grid(True, alpha=0.3)
+plt.legend(fontsize=10)
+plt.xlim([0, 60])  # focus on 0-60 Hz (main EEG bands)
+
+# plot 2: all three classes on the same plot (linear scale)
+plt.subplot(2, 2, 2)
+for class_idx in range(3):
+    plt.plot(frequencies, avg_spectra[class_idx], 
+            color=class_colors[class_idx], 
+            linewidth=2, 
+            label=class_names[class_idx],
+            alpha=0.8)
+plt.xlabel('Frequency (Hz)', fontsize=11)
+plt.ylabel('Power Spectral Density', fontsize=11)
+plt.title('Average Power Spectra - All Classes (Linear Scale)', fontsize=12, fontweight='bold')
+plt.grid(True, alpha=0.3)
+plt.legend(fontsize=10)
+plt.xlim([0, 60])
+
+# plot 3: zoomed into EEG bands (0-30 Hz) (log scale)
+plt.subplot(2, 2, 3)
+for class_idx in range(3):
+    plt.semilogy(frequencies, avg_spectra[class_idx], 
+                color=class_colors[class_idx], 
+                linewidth=2, 
+                label=class_names[class_idx],
+                alpha=0.8)
+plt.xlabel('Frequency (Hz)', fontsize=11)
+plt.ylabel('Power Spectral Density (log scale)', fontsize=11)
+plt.title('Average Power Spectra - EEG Bands (0-30 Hz)', fontsize=12, fontweight='bold')
+plt.grid(True, alpha=0.3)
+plt.legend(fontsize=10)
+plt.xlim([0, 30])
+# add vertical lines for EEG bands
+plt.axvline(x=4, color='gray', linestyle=':', alpha=0.5, label='Delta/Theta')
+plt.axvline(x=8, color='gray', linestyle=':', alpha=0.5, label='Theta/Alpha')
+plt.axvline(x=13, color='gray', linestyle=':', alpha=0.5, label='Alpha/Beta')
+
+# plot 4: individual class plots stacked
+plt.subplot(2, 2, 4)
+for class_idx in range(3):
+    # offset each class for visibility
+    offset = class_idx * 0.3
+    plt.plot(frequencies, avg_spectra[class_idx] + offset, 
+            color=class_colors[class_idx], 
+            linewidth=2, 
+            label=class_names[class_idx],
+            alpha=0.8)
+plt.xlabel('Frequency (Hz)', fontsize=11)
+plt.ylabel('Power Spectral Density (offset for visibility)', fontsize=11)
+plt.title('Average Power Spectra - Stacked View', fontsize=12, fontweight='bold')
+plt.grid(True, alpha=0.3)
+plt.legend(fontsize=10)
+plt.xlim([0, 45])
+
+plt.tight_layout()
+plt.savefig('average_spectrum_per_class.png', dpi=300, bbox_inches='tight')
+plt.show()
+
+print("\nPlot saved as 'average_spectrum_per_class.png'")
+
+# print summary of spectral characteristics for each class
+print("Spectral Analysis Summary: ")
+
+print("\nMethod: Welch's Power Spectral Density Estimation")
+print(f"Window Type: {window_type.capitalize()} window")
+print(f"Window Length (nperseg): {nperseg} samples (around{nperseg/fs:.2f} seconds)")
+print(f"Overlap: {nperseg//2} samples (50%)")
+print(f"FFT Length: {nperseg} points")
+print(f"Frequency Resolution: {frequencies[1] - frequencies[0]:.3f} Hz")
+print(f"Averaging Method: Arithmetic mean across all segments per class")
+
+
+print("Observations on Spectral Differences Among Classes:")
+
+for class_idx in range(3):
+    # calculate average power in different frequency bands
+    # Delta: 0.5-4 Hz, Theta: 4-8 Hz, Alpha: 8-13 Hz, Beta: 13-30 Hz
+    delta_band = (frequencies >= 0.5) & (frequencies < 4)
+    theta_band = (frequencies >= 4) & (frequencies < 8)
+    alpha_band = (frequencies >= 8) & (frequencies < 13)
+    beta_band = (frequencies >= 13) & (frequencies < 30)
+    
+    delta_power = np.mean(avg_spectra[class_idx][delta_band])
+    theta_power = np.mean(avg_spectra[class_idx][theta_band])
+    alpha_power = np.mean(avg_spectra[class_idx][alpha_band])
+    beta_power = np.mean(avg_spectra[class_idx][beta_band])
+    
+    print(f"\n{class_names[class_idx]} (Class {class_idx}):")
+    print(f"  Delta (0.5-4 Hz):   {delta_power:.4f}")
+    print(f"  Theta (4-8 Hz):     {theta_power:.4f}")
+    print(f"  Alpha (8-13 Hz):    {alpha_power:.4f}")
+    print(f"  Beta (13-30 Hz):    {beta_power:.4f}")
+    print(f"  Total Power (0-30 Hz): {delta_power + theta_power + alpha_power + beta_power:.4f}")
+
+
+print("DONE")
