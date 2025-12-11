@@ -283,7 +283,7 @@ print("-"*80)
 
 # Find best representation
 best_repr = max(all_results.items(), key=lambda x: x[1]['best_acc'])
-print(f"\n🏆 BEST REPRESENTATION: {best_repr[0]}")
+print(f"\n BEST REPRESENTATION: {best_repr[0]}")
 print(f"   Accuracy: {best_repr[1]['best_acc']:.4f} ({best_repr[1]['best_acc']*100:.2f}%)")
 print(f"   Optimal K: {best_repr[1]['optimal_k']}")
 
