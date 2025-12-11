@@ -40,9 +40,8 @@ print(f"  Frequency-band features: {freq_features.shape}")
 # Store results for all representations
 all_results = {}
 
-# ============================================================================
+
 # REPRESENTATION 1: TIME-DOMAIN EEG SIGNAL
-# ============================================================================
 print("\n" + "="*80)
 print("REPRESENTATION 1: TIME-DOMAIN EEG SIGNAL")
 print("="*80)
@@ -117,9 +116,7 @@ all_results['Time-Domain'] = {
     'description': 'Raw EEG signal (4096 samples)'
 }
 
-# ============================================================================
 # REPRESENTATION 2: DIFFERENTIATED EEG SIGNAL
-# ============================================================================
 print("\n" + "="*80)
 print("REPRESENTATION 2: DIFFERENTIATED EEG SIGNAL")
 print("="*80)
@@ -191,9 +188,7 @@ all_results['Differentiated'] = {
     'description': 'First derivative (4095 samples)'
 }
 
-# ============================================================================
 # REPRESENTATION 3: FREQUENCY-BAND FEATURES
-# ============================================================================
 print("\n" + "="*80)
 print("REPRESENTATION 3: FREQUENCY-BAND FEATURES")
 print("="*80)
@@ -266,9 +261,7 @@ all_results['Frequency-Band'] = {
     'description': '5 frequency band powers'
 }
 
-# ============================================================================
 # COMPARISON AND VISUALIZATION
-# ============================================================================
 print("\n" + "="*80)
 print("COMPREHENSIVE COMPARISON OF ALL REPRESENTATIONS")
 print("="*80)
@@ -294,9 +287,7 @@ print(f"\n🏆 BEST REPRESENTATION: {best_repr[0]}")
 print(f"   Accuracy: {best_repr[1]['best_acc']:.4f} ({best_repr[1]['best_acc']*100:.2f}%)")
 print(f"   Optimal K: {best_repr[1]['optimal_k']}")
 
-# ============================================================================
 # DETAILED VISUALIZATIONS
-# ============================================================================
 fig = plt.figure(figsize=(20, 14))
 
 # Plot 1: Accuracy Comparison Bar Chart
@@ -446,9 +437,7 @@ print("\n" + "="*80)
 print("Visualization saved as 'signal_representation_comparison_20sec.png'")
 print("="*80)
 
-# ============================================================================
 # SAVE DETAILED TEXT REPORT
-# ============================================================================
 print("\nSaving detailed report...")
 
 with open('signal_representation_report_20sec.txt', 'w') as f:
